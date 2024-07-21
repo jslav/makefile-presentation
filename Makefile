@@ -21,8 +21,11 @@ README:  ${RMG}  Makefile # target is the file
 	@$(RMG) > $@
 
 
-C_SOURCES=$(wildcard *.c)
+C_SOURCES=$(wildcard *.c)    # since now we included all .c files in directory into ${RMG} file building
 OBJ_FILES= $(addsuffix .o,$(basename $(C_SOURCES)))
+
+generate-readme.o: message1.h message3.h message4.h message5.h
+generate-final.o: message1.h message2.h message4.h message5.h
 
 ${RMG}: $(OBJ_FILES)
 	gcc $^ -o $@
