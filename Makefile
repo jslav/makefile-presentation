@@ -24,12 +24,6 @@ README:  ${RMG}  Makefile # target is the file
 C_SOURCES=$(wildcard *.c)
 OBJ_FILES= $(addsuffix .o,$(basename $(C_SOURCES)))
 
-generate-readme.o: generate-readme.c
-	gcc $^ -c -o $@
-	
-generate-final.o: generate-final.c
-	gcc $^ -c -o $@
-
 ${RMG}: $(OBJ_FILES)
 	gcc $^ -o $@
 
@@ -41,3 +35,16 @@ clean:
 probe:
 	@echo source files: $(C_SOURCES)
 	@echo object files: $(OBJ_FILES)
+
+
+# ~ ~ ~ ~ ~ ~ EXPLICIT RULES ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+%.o: %.c 
+	gcc $< -c -o $@
+
+# same as
+# %.o: %.c ; gcc $< -c -o $@
+
+# same as
+#.SUFFIXES: .c .o
+# .c.o: ; gcc $< -c -o $@
+
