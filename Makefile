@@ -4,11 +4,8 @@ RMG=${READMEGENERATOR} # set up this variable before
 .PHONY: all # instructs make utility to skip searching the file named "all"
 
 all: README depgraph.svg
-
-README:   ${BINGEN} ${RMG}  Makefile # target is the file
-	@echo "Making README file"
-	@$(RMG) > README
 	
+# ~ ~ ~ ~ ~ ~ Make dependencies graph ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 depgraph.svg: depgraph.gv
 	dot -Tsvg depgraph.gv >depgraph.svg
 
@@ -18,7 +15,12 @@ depgraph.gv: makefile-db.txt
 makefile-db.txt: Makefile
 	LANG=C make -p -n > $@
 
-${RMG}: generate-readme.c
-	gcc generate-readme.c -o ${RMG}
+# ~ ~ ~ ~ ~ ~ Make README file  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+README:   ${BINGEN} ${RMG}  Makefile # target is the file
+	@echo "Making README file"
+	@$(RMG) > README
+
+${RMG}: generate-readme.c generate-final.c
+	gcc generate-readme.c generate-final.c -o ${RMG}
 
 	
