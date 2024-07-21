@@ -1,11 +1,13 @@
 
+RMG=${READMEGENERATOR} # set up this variable before
+
 .PHONY: all # instructs make utility to skip searching the file named "all"
 
 all: README depgraph.svg
 
-README:      # target is the file
+README:   ${BINGEN} ${RMG}  Makefile # target is the file
 	@echo "Making README file"
-	@echo "This is the presentatioon of make utility purposes and capabilities" > README
+	@$(RMG) > README
 	
 depgraph.svg: depgraph.gv
 	dot -Tsvg depgraph.gv >depgraph.svg
@@ -16,5 +18,7 @@ depgraph.gv: makefile-db.txt
 makefile-db.txt: Makefile
 	LANG=C make -p -n > $@
 
+${RMG}: generate-readme.c
+	gcc generate-readme.c -o ${RMG}
 
 	
