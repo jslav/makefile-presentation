@@ -1,7 +1,7 @@
 
 RMG=${READMEGENERATOR} # set up this variable before
 
-.PHONY: all # instructs make utility to skip searching the file named "all"
+.PHONY: all clean # instructs make utility to skip searching the file named "all"
 
 all: README depgraph.svg
 	
@@ -20,7 +20,16 @@ README:  ${RMG}  Makefile # target is the file
 	@echo "Making README file"
 	@$(RMG) > $@
 
-${RMG}: generate-readme.c generate-final.c
+generate-readme.o: generate-readme.c
+	gcc $^ -c -o $@
+	
+generate-final.o: generate-final.c
+	gcc $^ -c -o $@
+
+${RMG}: generate-readme.o generate-final.o
 	gcc $^ -o $@
 
-	
+# ~ ~ ~ ~ ~ ~ CLEANUP ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+clean:
+	@echo cleaning obsolete and intermediate files
+	@rm -vf README *.svg *.gv *.o makefile-db.txt
