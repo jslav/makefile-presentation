@@ -22,10 +22,10 @@ README:  ${RMG}  Makefile # target is the file
 
 
 C_SOURCES=$(wildcard *.c)    # since now we included all .c files in directory into ${RMG} file building
-OBJ_FILES= $(addsuffix .o,$(basename $(C_SOURCES)))
+OBJ_FILES=$(addsuffix .o,$(basename $(C_SOURCES)))
+DEP_FILES=$(addsuffix .d,$(basename $(C_SOURCES)))
 
-generate-readme.o: message1.h message3.h message4.h message5.h
-generate-final.o: message1.h message2.h message4.h message5.h
+-include $(DEP_FILES)
 
 ${RMG}: $(OBJ_FILES)
 	gcc $^ -o $@
@@ -38,6 +38,7 @@ clean:
 probe:
 	@echo source files: $(C_SOURCES)
 	@echo object files: $(OBJ_FILES)
+	@echo object files: $(DEP_FILES)
 
 
 # ~ ~ ~ ~ ~ ~ EXPLICIT RULES ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -51,3 +52,6 @@ probe:
 #.SUFFIXES: .c .o
 # .c.o: ; gcc $< -c -o $@
 
+# ~ ~ ~ ~ ~ ~ Making dependencies file  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+%.d: %.c
+	gcc $< -MMD -MP -MF $@
