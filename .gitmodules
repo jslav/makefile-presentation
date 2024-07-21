@@ -1,0 +1,3 @@
+[submodule "makefile-visualizer"]
+	path = makefile-visualizer
+	url = https://github.com/souring001/makefile-visualizer.git
