@@ -38,7 +38,7 @@ clean:
 probe:
 	@echo source files: $(C_SOURCES)
 	@echo object files: $(OBJ_FILES)
-	@echo object files: $(DEP_FILES)
+	@echo dependency files: $(DEP_FILES)
 
 
 # ~ ~ ~ ~ ~ ~ EXPLICIT RULES ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -54,4 +54,4 @@ probe:
 
 # ~ ~ ~ ~ ~ ~ Making dependencies file  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 %.d: %.c
-	gcc $< -MMD -MP -MF $@
+	gcc $< -MMD -MF $@
