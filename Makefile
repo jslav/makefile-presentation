@@ -20,12 +20,16 @@ README:  ${RMG}  Makefile # target is the file
 	@echo "Making README file"
 	@$(RMG) > $@
 
-
 C_SOURCES=$(wildcard *.c)    # since now we included all .c files in directory into ${RMG} file building
 OBJ_FILES=$(addsuffix .o,$(basename $(C_SOURCES)))
 DEP_FILES=$(addsuffix .d,$(basename $(C_SOURCES)))
 
--include $(DEP_FILES)
+DEPDIR=.deps
+DEPFILES := $(C_SOURCES:%.c=$(DEPDIR)/%.d)
+$(DEPDIR): ; mkdir -p $@
+
+$(DEPFILES): $(DEPDIR)
+-include $(DEPFILES)
 
 ${RMG}: $(OBJ_FILES)
 	gcc $^ -o $@
@@ -39,6 +43,7 @@ probe:
 	@echo source files: $(C_SOURCES)
 	@echo object files: $(OBJ_FILES)
 	@echo dependency files: $(DEP_FILES)
+	@echo dependency files: $(DEPFILES)
 
 
 # ~ ~ ~ ~ ~ ~ EXPLICIT RULES ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -53,5 +58,5 @@ probe:
 # .c.o: ; gcc $< -c -o $@
 
 # ~ ~ ~ ~ ~ ~ Making dependencies file  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-%.d: %.c
+%{DEPDIR}/%.d: %.c
 	gcc $< -MMD -MF $@
